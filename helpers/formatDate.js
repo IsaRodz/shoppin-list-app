@@ -1,4 +1,6 @@
-export default function formatDate(date) {
+export default function formatedDate(dateString) {
+  const date = new Date(dateString);
+
   const m = months[date.getMonth() + 1];
   const d = date.getDate();
   const y = date.getFullYear();

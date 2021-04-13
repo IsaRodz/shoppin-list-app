@@ -2,13 +2,12 @@ import React, { useContext, useState } from 'react';
 import { View, StyleSheet, TextInput, Keyboard } from 'react-native';
 import { ShoppingListContext } from '../context';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import 'react-native-get-random-values';
 import { v4 } from 'uuid';
 
 export default function CreateItemForm({ listId, listColor }) {
   const { dispatch } = useContext(ShoppingListContext);
-
   const [name, setName] = useState(null);
   const [price, setPrice] = useState(null);
 
@@ -47,12 +46,20 @@ export default function CreateItemForm({ listId, listColor }) {
         value={price}
         onChangeText={price => setPrice(price)}
       />
-      <TouchableNativeFeedback
-        onPress={handlePress}
-        style={styles.button(listColor)}
-      >
-        <Ionicons name="add" color="#fff" size={24} />
-      </TouchableNativeFeedback>
+      <View style={[styles.button, { backgroundColor: listColor }]}>
+        <TouchableNativeFeedback
+          backgroundColor={TouchableNativeFeedback.Ripple('white', true)}
+          onPress={handlePress}
+          style={{
+            width: 55,
+            height: 55,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Feather name="plus" color="#fff" size={24} />
+        </TouchableNativeFeedback>
+      </View>
     </View>
   );
 }
@@ -60,8 +67,8 @@ export default function CreateItemForm({ listId, listColor }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    height: 75,
     padding: 10,
-    height: 65,
   },
   input: {
     borderStyle: 'solid',
@@ -69,17 +76,14 @@ const styles = StyleSheet.create({
     marginRight: 7,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    borderRadius: 4,
+    fontSize: 16,
+    borderRadius: 8,
     borderColor: '#ddd',
     flex: 1,
   },
-  button: color => ({
-    backgroundColor: color,
-    flex: 1,
-    height: 45,
-    width: 45,
-    borderRadius: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }),
+  button: {
+    overflow: 'hidden',
+    borderRadius: 55,
+    width: 55,
+  },
 });

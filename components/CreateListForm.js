@@ -23,7 +23,7 @@ export default function CreateListForm({ onSubmit }) {
             title: listTitle,
             items: [],
             color: listColor,
-            creationDate: new Date(),
+            createdAt: new Date().toString()
           },
         },
       });
@@ -38,6 +38,7 @@ export default function CreateListForm({ onSubmit }) {
         onChangeText={text => setListTitle(text)}
       />
       <FlatList
+        showsHorizontalScrollIndicator={false}
         data={colors}
         keyExtractor={item => item}
         style={styles.flatList}
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   flatList: {
     marginHorizontal: 10,
     marginBottom: 10,
-    marginTop: -10,
+    marginTop: -16,
     paddingVertical: 10,
   },
   color: color => ({

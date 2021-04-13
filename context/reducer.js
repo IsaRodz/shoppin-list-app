@@ -1,33 +1,4 @@
-const initialState = [
-  {
-    id: '1',
-    title: 'Food',
-    items: [],
-    color: '#009688',
-  },
-  {
-    id: '2',
-    title: 'Party',
-    items: [
-      {
-        id: '1',
-        name: 'Hot dogs',
-        price: 5,
-      },
-      {
-        id: '2',
-        name: 'Soda',
-        price: 5,
-      },
-      {
-        id: '3',
-        name: 'Beer',
-        price: 7.4,
-      },
-    ],
-    color: '#673ab7',
-  },
-];
+const initialState = [];
 
 function reducer(state = initialState, action) {
   const { type, payload } = action;

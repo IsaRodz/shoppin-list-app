@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,15 +9,17 @@ import {
   UIManager,
   LayoutAnimation,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import {
   FlatList,
   TouchableNativeFeedback,
 } from 'react-native-gesture-handler';
-import { Divider, ListItem } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import CreateItemForm from '../components/CreateItemForm';
 import { ShoppingListContext } from '../context';
+
+import ListDetailHeader from '../components/ListDetailHeader';
 
 const { configureNext, create } = LayoutAnimation;
 
@@ -30,37 +32,8 @@ if (
 
 const window = Dimensions.get('window');
 
-export default function ListDetail({ route, navigation }) {
-  const { dispatch } = useContext(ShoppingListContext);
+export default function ListDetail({ route }) {
   const currentList = route.params.list;
-
-  const deleteList = () => {
-    dispatch({
-      type: 'DELETE_LIST',
-      payload: { id: currentList.id },
-    });
-    navigation.navigate('Home');
-  };
-
-  useEffect(() => {
-    navigation.setOptions({
-      title: currentList.title,
-      headerStyle: {
-        backgroundColor: currentList.color,
-      },
-      headerTintColor: 'white',
-      headerRight: () => (
-        <TouchableNativeFeedback
-          style={{ flexDirection: 'row' }}
-          background={TouchableNativeFeedback.Ripple('#161616', true, 20)}
-          onPress={deleteList}
-        >
-          <Ionicons name="trash-outline" color="white" size={20} />
-        </TouchableNativeFeedback>
-      ),
-      headerRightContainerStyle: { marginRight: 16 },
-    });
-  });
 
   const emptyList = () => (
     <View
@@ -70,7 +43,7 @@ export default function ListDetail({ route, navigation }) {
         height: Dimensions.get('screen').height / 2,
       }}
     >
-      <Ionicons name="folder-open-outline" size={40} color="#c4c4c4" />
+      <Feather name="archive" size={40} color="#c4c4c4" />
       <Text style={{ color: '#c4c4c4', fontSize: 18, marginVertical: 5 }}>
         This list is empty
       </Text>
@@ -81,12 +54,13 @@ export default function ListDetail({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      <ListDetailHeader currentList={currentList} />
       <FlatList
+        // onScroll={e => console.log(e)}
         data={currentList.items}
         ListEmptyComponent={emptyList}
         keyExtractor={list => list.id}
         renderItem={renderItem}
-        ItemSeparatorComponent={Divider}
       />
       <CreateItemForm listId={currentList.id} listColor={currentList.color} />
     </View>
@@ -95,7 +69,6 @@ export default function ListDetail({ route, navigation }) {
 
 function Item({ item, listId }) {
   const { dispatch } = useContext(ShoppingListContext);
-  const [willDelete, setWillDelete] = useState(false);
   const translateX = useRef(new Animated.Value(0)).current;
 
   const deleteItem = () => {
@@ -114,39 +87,30 @@ function Item({ item, listId }) {
     }, 150);
   };
 
-  const listItemAction = (progress, dragX) => {
-    const scale = dragX.interpolate({
-      inputRange: [0, 100],
-      outputRange: [0, 1],
-    });
-
-    return (
-      <Animated.View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingHorizontal: 16,
-          borderRadius: 4,
-          // transform: [{ scale }],
-        }}
-      >
-        <Ionicons name="trash-outline" size={20} color="#fff" />
-        <Text style={{ color: '#fff' }}>Delete</Text>
-      </Animated.View>
-    );
-  };
+  const listItemAction = () => (
+    <Animated.View
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 16,
+      }}
+    >
+      <Feather name="trash-2" size={20} color="#fff" />
+      <Text style={{ color: '#fff' }}>Delete</Text>
+    </Animated.View>
+  );
 
   return (
     <Swipeable
       containerStyle={{
-        backgroundColor: !willDelete ? '#f44336' : '#9a9a9a',
+        backgroundColor: '#f44336',
       }}
       rightThreshold={window.width / 2}
       renderRightActions={listItemAction}
       onSwipeableRightWillOpen={deleteItem}
     >
       <Animated.View style={{ transform: [{ translateX }] }}>
-        <ListItem>
+        <ListItem bottomDivider>
           <ListItem.Content>
             <ListItem.Title>{item.name}</ListItem.Title>
             <ListItem.Subtitle>S/. {item.price}</ListItem.Subtitle>

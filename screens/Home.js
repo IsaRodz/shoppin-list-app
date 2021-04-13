@@ -2,21 +2,25 @@ import React, { useContext, useRef } from 'react';
 import { StyleSheet, Text, View, FlatList, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { ShoppingListContext } from '../context';
 import CreateListForm from '../components/CreateListForm';
 import ActionSheet from '../components/ActionSheet';
+import { StatusBar } from 'expo-status-bar';
+import listTotal from '../helpers/getListTotal';
 
 export default function Home({ navigation }) {
   const { state } = useContext(ShoppingListContext);
 
   const formSheet = useRef();
+  const flatList = useRef();
+
+  const handleSizeChange = () => {
+    flatList.current.scrollToEnd({ animated: true });
+  };
 
   const renderItem = ({ item }) => {
-    const total = (function () {
-      const list = item;
-      return list.items.reduce((acc, item) => item.price + acc, 0);
-    })();
+    const total = listTotal(item);
 
     const goToDetail = () => {
       navigation.navigate('ListDetail', { list: item });
@@ -36,7 +40,7 @@ export default function Home({ navigation }) {
             {item.items.length}
           </Text>
           <Text style={{ color: '#fff9', marginBottom: 7 }}>Items</Text>
-          <Text style={{ color: '#fff9', fontSize: 24 }}>{total}</Text>
+          <Text style={{ color: '#fff9', fontSize: 24 }}>S/. {total}</Text>
           <Text style={{ color: '#fff9' }}>Total</Text>
         </TouchableNativeFeedback>
       </View>
@@ -45,7 +49,7 @@ export default function Home({ navigation }) {
 
   const emptyList = () => (
     <View style={styles.emptyList}>
-      <Ionicons name="folder-open-outline" size={36} color="#9a9a9a" />
+      <Feather name="archive" size={36} color="#9a9a9a" />
       <Text style={{ color: '#9a9a9a', fontSize: 16 }}>
         You don't have any lists yet
       </Text>
@@ -54,8 +58,23 @@ export default function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" animated={true} />
+      <Text
+        style={{
+          fontSize: 32,
+          fontWeight: 'bold',
+          marginHorizontal: 16,
+          marginBottom: 100,
+          marginTop: -100,
+        }}
+      >
+        My ShoppingList
+      </Text>
       <FlatList
-        style={{ marginLeft: 8 }}
+        ref={flatList}
+        onContentSizeChange={handleSizeChange}
+        showsHorizontalScrollIndicator={false}
+        style={{ marginLeft: 8, flexGrow: 0 }}
         data={state}
         keyExtractor={item => item.id}
         renderItem={renderItem}
@@ -66,10 +85,10 @@ export default function Home({ navigation }) {
         <CreateListForm onSubmit={() => formSheet.current.close()} />
       </ActionSheet>
       <Button
-        containerStyle={{ margin: 30 }}
+        containerStyle={{ position: 'absolute', bottom: 30 }}
         buttonStyle={{ width: 60, height: 60, borderRadius: 30 }}
         onPress={() => formSheet.current.open()}
-        icon={() => <Ionicons color="white" size={24} name="add" />}
+        icon={() => <Feather color="white" size={24} name="plus" />}
       />
     </View>
   );
@@ -107,7 +126,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     overflow: 'hidden',
     alignSelf: 'center',
-    width: 160,
+    minWidth: 160,
   },
   touchable: {
     padding: 16,

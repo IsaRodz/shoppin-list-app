@@ -17,7 +17,7 @@ export default function TestList() {
 
   const emptyList = () => (
     <View style={{ paddingVertical: 50, alignItems: 'center' }}>
-      <Ionicons size={40} color="#9a9a9a" name="folder-open-outline" />
+      <Ionicons size={40} color="#9a9a9a" name="archive-open-outline" />
       <Text style={{ fontSize: 16, color: '#7a7a7a', marginVertical: 7 }}>
         You don't have items yet
       </Text>

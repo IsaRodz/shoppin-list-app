@@ -22,6 +22,8 @@ export default class ActionSheet extends Component {
       <RBSheet
         ref={this.bs}
         closeOnDragDown={true}
+        animationType="fade"
+        openDuration={250}
         customStyles={{
           container: styles.bottomSheet,
           draggableIcon: styles.draggableIcon,
