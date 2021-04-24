@@ -1,42 +1,78 @@
-import React, { useContext } from 'react';
-import { Text, StyleSheet, Animated } from 'react-native';
-import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import React, { useContext, useRef } from 'react';
+import {
+  Text,
+  Animated,
+  Dimensions,
+  StyleSheet,
+  LayoutAnimation,
+  UIManager,
+} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { ListItem } from 'react-native-elements';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { ShoppingListContext } from '../context';
+
+const { configureNext, create } = LayoutAnimation;
+
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+const window = Dimensions.get('window');
 
 export default function Item({ item, listId }) {
   const { dispatch } = useContext(ShoppingListContext);
+  const translateX = useRef(new Animated.Value(0)).current;
 
   const deleteItem = () => {
-    dispatch({
-      type: 'DELETE_LIST_ITEM',
-      payload: {
-        itemId: item.id,
-        listId: listId,
-      },
-    });
-    console.log('delete', item.id);
+    Animated.timing(translateX, {
+      duration: 150,
+      toValue: -window.width,
+      useNativeDriver: true,
+    }).start();
+
+    setTimeout(() => {
+      configureNext(create(150, 'linear', 'opacity'));
+      dispatch({
+        type: 'DELETE_LIST_ITEM',
+        payload: { itemId: item.id, listId },
+      });
+    }, 150);
   };
 
-  const Actions = () => (
-    <TouchableNativeFeedback style={styles.buttonContainer}>
-      <Animated.View style={styles.deleteButton}>
-        <Ionicons color="white" name="trash-outline" size={20} />
-        <Text style={styles.buttonText}>Delete</Text>
-      </Animated.View>
-    </TouchableNativeFeedback>
+  const listItemAction = () => (
+    <Animated.View
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 16,
+      }}
+    >
+      <Feather name="trash-2" size={20} color="#fff" />
+      <Text style={{ color: '#fff' }}>Delete</Text>
+    </Animated.View>
   );
 
   return (
-    <Swipeable renderLeftActions={Actions} onSwipeableWillOpen={deleteItem}>
-      <ListItem>
-        <ListItem.Content>
-          <ListItem.Title>{item.name}</ListItem.Title>
-          <ListItem.Subtitle>S/. {item.price}</ListItem.Subtitle>
-        </ListItem.Content>
-      </ListItem>
+    <Swipeable
+      containerStyle={{
+        backgroundColor: '#f44336',
+      }}
+      rightThreshold={window.width / 2}
+      renderRightActions={listItemAction}
+      onSwipeableRightWillOpen={deleteItem}
+    >
+      <Animated.View style={{ transform: [{ translateX }] }}>
+        <ListItem bottomDivider>
+          <ListItem.Content>
+            <ListItem.Title>{item.name}</ListItem.Title>
+            <ListItem.Subtitle>S/. {item.price}</ListItem.Subtitle>
+          </ListItem.Content>
+        </ListItem>
+      </Animated.View>
     </Swipeable>
   );
 }
