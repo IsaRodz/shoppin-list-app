@@ -23,7 +23,7 @@ const ListCard = ({ list }) => {
         onPress={goToDetail}
         style={styles.touchable}
       >
-        <Text style={{ fontSize: 18, color: '#fff', marginBottom: 7 }}>
+        <Text style={{ fontSize: 20, color: '#fff', marginBottom: 7 }}>
           {list.title}
         </Text>
         <Text style={{ color: '#fff9', fontSize: 24 }}>
@@ -40,13 +40,13 @@ const ListCard = ({ list }) => {
 const styles = StyleSheet.create({
   card: {
     borderRadius: 5,
-    marginRight: 8,
+    marginRight: 10,
     overflow: 'hidden',
     alignSelf: 'center',
-    minWidth: 160,
+    minWidth: 180,
   },
   touchable: {
-    padding: 16,
+    padding: 24,
     alignItems: 'center',
   },
 });

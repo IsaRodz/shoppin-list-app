@@ -5,19 +5,24 @@ function reducer(state = initialState, action) {
   let newState;
 
   switch (type) {
+    case 'LOAD_DATA':
+      newState = payload.data;
+      break;
+
     case 'CREATE_LIST':
-      return [...state, payload.newList];
+      newState = [...state, payload.newList];
+      break;
 
     case 'DELETE_LIST':
-      return state.filter(list => list.id !== payload.id);
+      newState = state.filter(list => list.id !== payload.id);
+      break;
 
     case 'CREATE_LIST_ITEM':
       newState = [...state];
       newState
         .find(list => list.id === payload.listId)
         .items.push(payload.newItem);
-
-      return newState;
+      break;
 
     case 'DELETE_LIST_ITEM':
       newState = [...state];
@@ -26,12 +31,13 @@ function reducer(state = initialState, action) {
       let item = list.items.findIndex(item => item.id === payload.itemId);
 
       list.items.splice(item, 1);
-
-      return newState;
+      break;
 
     default:
       return state;
   }
+
+  return newState;
 }
 
 export { reducer, initialState };

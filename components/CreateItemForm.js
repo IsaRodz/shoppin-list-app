@@ -32,13 +32,14 @@ export default function CreateItemForm({ listId, listColor }) {
   return (
     <View style={styles.container}>
       <TextInput
+        selectionColor={listColor}
         placeholder="Name"
         style={styles.input}
-        label="Name"
         onChangeText={name => setName(name)}
         value={name}
       />
       <TextInput
+        selectionColor={listColor}
         placeholder="Price"
         style={styles.input}
         label="Price"

@@ -7,6 +7,7 @@ import CreateListForm from '../components/CreateListForm';
 import ActionSheet from '../components/ActionSheet';
 import { StatusBar } from 'expo-status-bar';
 import renderListCard from '../components/renderListCard';
+import { Dimensions } from 'react-native';
 
 export default function Home() {
   const { state } = useContext(ShoppingListContext);
@@ -20,8 +21,8 @@ export default function Home() {
 
   const emptyList = () => (
     <View style={styles.emptyList}>
-      <Feather name="archive" size={36} color="#9a9a9a" />
-      <Text style={{ color: '#9a9a9a', fontSize: 16 }}>
+      <Feather name="archive" size={36} color="#c4c4c4" />
+      <Text style={{ color: '#c4c4c4', fontSize: 16, marginTop: 10 }}>
         You don't have any lists yet
       </Text>
     </View>
@@ -35,7 +36,7 @@ export default function Home() {
         ref={flatList}
         onContentSizeChange={handleSizeChange}
         showsHorizontalScrollIndicator={false}
-        style={{ marginLeft: 8, flexGrow: 0 }}
+        style={{ marginLeft: 10, flexGrow: 0 }}
         data={state}
         keyExtractor={item => item.id}
         renderItem={renderListCard}
@@ -70,9 +71,9 @@ const styles = StyleSheet.create({
     marginTop: -100,
   },
   emptyList: {
+    marginLeft: -16,
+    width: Dimensions.get('window').width,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 50,
   },
   floatingButton: {
     borderRadius: 55,
