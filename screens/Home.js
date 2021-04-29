@@ -21,10 +21,8 @@ export default function Home() {
 
   const emptyList = () => (
     <View style={styles.emptyList}>
-      <Feather name="archive" size={36} color="#c4c4c4" />
-      <Text style={{ color: '#c4c4c4', fontSize: 16, marginTop: 10 }}>
-        You don't have any lists yet
-      </Text>
+      <Feather name="archive" size={50} color="#c4c4c4" />
+      <Text style={styles.emptyListText}>You don't have any lists yet</Text>
     </View>
   );
 
@@ -74,6 +72,11 @@ const styles = StyleSheet.create({
     marginLeft: -16,
     width: Dimensions.get('window').width,
     alignItems: 'center',
+  },
+  emptyListText: {
+    color: '#c4c4c4',
+    fontSize: 18,
+    marginVertical: 10,
   },
   floatingButton: {
     borderRadius: 55,

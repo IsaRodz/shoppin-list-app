@@ -11,7 +11,7 @@ import colors from './colors';
 export default function CreateListForm({ onSubmit }) {
   const { dispatch } = useContext(ShoppingListContext);
   const [listTitle, setListTitle] = useState('');
-  const [listColor, setListColor] = useState(colors[0]);
+  const [listColor, setListColor] = useState('#4caf50');
 
   const createList = () => {
     if (listTitle.length > 2) {
@@ -23,7 +23,7 @@ export default function CreateListForm({ onSubmit }) {
             title: listTitle,
             items: [],
             color: listColor,
-            createdAt: new Date().toString()
+            createdAt: new Date().toString(),
           },
         },
       });

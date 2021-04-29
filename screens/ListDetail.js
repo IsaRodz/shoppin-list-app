@@ -14,7 +14,7 @@ export default function ListDetail({ route }) {
 
   const emptyList = () => (
     <View style={styles.emptyList}>
-      <Feather name="archive" size={40} color="#c4c4c4" />
+      <Feather name="shopping-bag" size={50} color="#c4c4c4" />
       <Text style={styles.emptyListText}>This list is empty</Text>
     </View>
   );
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
   emptyListText: {
     color: '#c4c4c4',
     fontSize: 18,
-    marginVertical: 5,
+    marginVertical: 10,
   },
 });
